@@ -81,11 +81,11 @@ class FileStorage
   end
 
   private def self.bake_files(files)
-    js = ""
+    output_string = ""
     files.each do |file|
-      js = js + FileStorage.get(file).gets_to_end
+      output_string = output_string + FileStorage.get(file).gets_to_end
     end
-    js
+    output_string
   end
 
 end
