@@ -54,6 +54,57 @@ end
 FileStorage.get? "missing/file" # => nil
 ```
 
+Example of `FileStorage` class
+```crystal
+class FileStorage
+  extend BakedFileSystem
+
+  bake_folder "/Users/luis/Desktop/Code/Crystal/apps/baked/public"
+
+  def self.css
+    files = [
+      "/assets/css/dashboard.css"
+    ]
+    self.bake_files(files)
+  end
+
+  def self.js
+    files = [
+      "/assets/js/main.js",
+      "/assets/js/main_1.js"
+    ]
+    self.bake_files(files)
+  end
+
+  def self.image(image_path)
+    Base64.encode(FileStorage.get(image_path).gets_to_end)
+  end
+
+  private def self.bake_files(files)
+    js = ""
+    files.each do |file|
+      js = js + FileStorage.get(file).gets_to_end
+    end
+    js
+  end
+
+end
+```
+
+Use it in `HTML`
+```html
+<style>
+    <%= FileStorage.css %>
+</style>
+
+<img src="data:image/png;base64, <%= FileStorage.image("/assets/img/user.png") %>">
+
+<script>
+<%= FileStorage.js %>
+</script>
+
+```
+
 ## Development
 
 TODO: Write development instructions here
